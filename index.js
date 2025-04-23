@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const AppsData = require('./data/apps');
 const app = express();
 
 const port = 3000;
@@ -14,6 +15,16 @@ app.use(express.static(path.join(__dirname, 'assets')));
 app.get('/', (req, res) => {
   res.render('index', {route: 'home'});
 });
+
+app.get('/:id/privacy', (req, res) => {
+  const appData = AppsData[req.params.id]
+
+  if (appData) {
+    res.render('privacy', { route: 'privacy', data: appData })
+  } else {
+    res.status(404).send('404 - NOT FOUND')
+  }
+})
 
 app.get('*', (req, res) => {
   res.redirect('/');
